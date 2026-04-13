@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCD - Système de Gestion Hospitalière</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .mcd-container {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1400px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+        }
+        
+        .mcd-diagram {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px;
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        /* Entités */
+        .entity {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            color: white;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .entity:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .entity.patient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .entity.medecin {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .entity.rendez-vous {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .entity.facture {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .entity-header {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 3px solid rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .entity-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .attribute {
+            padding: 8px 15px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .attribute.pk {
+            background: rgba(231, 76, 60, 0.3);
+            font-weight: bold;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .attribute.fk {
+            background: rgba(241, 196, 15, 0.3);
+            font-weight: bold;
+            border-left: 4px solid #f1c40f;
+        }
+        
+        /* Relations */
+        .relations-section {
+            margin-top: 50px;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #e9ecef;
+        }
+        
+        .relations-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .relation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin: 15px 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .relation:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .relation-entity {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .relation-entity.patient-rel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .relation-entity.medecin-rel {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .relation-entity.rdv-rel {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .relation-entity.facture-rel {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .relation-arrow {
+            flex: 0.5;
+            text-align: center;
+            font-size: 2rem;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .relation-name {
+            flex: 1;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #3498db;
+        }
+        
+        .cardinality {
+            font-size: 0.9rem;
+            color: #e74c3c;
+            font-weight: bold;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        
+        /* Légende */
+        .legend {
+            margin-top: 40px;
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .legend-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        
+        .legend-pk { background: #e74c3c; }
+        .legend-fk { background: #f1c40f; }
+        
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1rem;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+        }
+        
+        .footer strong {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="mcd-container">
+        <h1>📊 MCD - Modèle Conceptuel de Données</h1>
+        <p class="subtitle">Système de Gestion Hospitalière - MediCare Plus</p>
+        
+        <!-- Entités -->
+        <div class="mcd-diagram">
+            <!-- PATIENT -->
+            <div class="entity patient">
+                <div class="entity-icon">👥</div>
+                <div class="entity-header">PATIENT</div>
+                <div class="attribute pk">🔑 idpatient (PK)</div>
+                <div class="attribute">nom</div>
+                <div class="attribute">prenom</div>
+                <div class="attribute">age</div>
+                <div class="attribute">date_naissance</div>
+                <div class="attribute">adresse</div>
+                <div class="attribute">telephone</div>
+                <div class="attribute">email</div>
+                <div class="attribute">sexe</div>
+                <div class="attribute">groupe_sanguin</div>
+                <div class="attribute">date_inscription</div>
+            </div>
+            
+            <!-- MEDECIN -->
+            <div class="entity medecin">
+                <div class="entity-icon">👨‍⚕️</div>
+                <div class="entity-header">MEDECIN</div>
+                <div class="attribute pk">🔑 idmedecin (PK)</div>
+                <div class="attribute">nom</div>
+                <div class="attribute">prenom</div>
+                <div class="attribute">specialite</div>
+                <div class="attribute">telephone</div>
+                <div class="attribute">email</div>
+                <div class="attribute">adresse</div>
+                <div class="attribute">numero_licence (UNIQUE)</div>
+                <div class="attribute">date_embauche</div>
+                <div class="attribute">statut</div>
+                <div class="attribute">tarif_consultation</div>
+                <div class="attribute">date_creation</div>
+            </div>
+            
+            <!-- RENDEZ_VOUS -->
+            <div class="entity rendez-vous">
+                <div class="entity-icon">📅</div>
+                <div class="entity-header">RENDEZ_VOUS</div>
+                <div class="attribute pk">🔑 idrendezvous (PK)</div>
+                <div class="attribute fk">🔗 idpatient (FK)</div>
+                <div class="attribute fk">🔗 idmedecin (FK)</div>
+                <div class="attribute">date_rdv</div>
+                <div class="attribute">heure_rdv</div>
+                <div class="attribute">motif</div>
+                <div class="attribute">statut</div>
+                <div class="attribute">notes</div>
+                <div class="attribute">date_creation</div>
+            </div>
+            
+            <!-- FACTURE -->
+            <div class="entity facture">
+                <div class="entity-icon">💰</div>
+                <div class="entity-header">FACTURE</div>
+                <div class="attribute pk">🔑 idfacture (PK)</div>
+                <div class="attribute fk">🔗 idpatient (FK)</div>
+                <div class="attribute fk">🔗 idmedecin (FK)</div>
+                <div class="attribute fk">🔗 idrendezvous (FK)</div>
+                <div class="attribute">numero_facture (UNIQUE)</div>
+                <div class="attribute">date_facture</div>
+                <div class="attribute">montant_total</div>
+                <div class="attribute">montant_paye</div>
+                <div class="attribute">statut_paiement</div>
+                <div class="attribute">mode_paiement</div>
+                <div class="attribute">description</div>
+                <div class="attribute">date_creation</div>
+            </div>
+        </div>
+        
+        <!-- Relations -->
+        <div class="relations-section">
+            <div class="relations-title">🔗 Relations Entre Entités</div>
+            
+            <div class="relation">
+                <div class="relation-entity patient-rel">
+                    PATIENT
+                    <div class="cardinality">1,n</div>
+                </div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-name">PRENDRE</div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-entity rdv-rel">
+                    RENDEZ_VOUS
+                    <div class="cardinality">0,n</div>
+                </div>
+            </div>
+            
+            <div class="relation">
+                <div class="relation-entity medecin-rel">
+                    MEDECIN
+                    <div class="cardinality">1,1</div>
+                </div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-name">CONSULTER</div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-entity rdv-rel">
+                    RENDEZ_VOUS
+                    <div class="cardinality">0,n</div>
+                </div>
+            </div>
+            
+            <div class="relation">
+                <div class="relation-entity patient-rel">
+                    PATIENT
+                    <div class="cardinality">1,1</div>
+                </div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-name">CONCERNER</div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-entity facture-rel">
+                    FACTURE
+                    <div class="cardinality">0,n</div>
+                </div>
+            </div>
+            
+            <div class="relation">
+                <div class="relation-entity medecin-rel">
+                    MEDECIN
+                    <div class="cardinality">1,n</div>
+                </div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-name">ETABLIR</div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-entity facture-rel">
+                    FACTURE
+                    <div class="cardinality">0,n</div>
+                </div>
+            </div>
+            
+            <div class="relation">
+                <div class="relation-entity rdv-rel">
+                    RENDEZ_VOUS
+                    <div class="cardinality">0,1</div>
+                </div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-name">GENERER</div>
+                <div class="relation-arrow">→</div>
+                <div class="relation-entity facture-rel">
+                    FACTURE
+                    <div class="cardinality">0,1</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Légende -->
+        <div class="legend">
+            <div class="legend-title">📖 Légende</div>
+            <div class="legend-item">
+                <div class="legend-color legend-pk"></div>
+                <span><strong>PK (Primary Key)</strong> - Clé Primaire : Identifiant unique de l'entité</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color legend-fk"></div>
+                <span><strong>FK (Foreign Key)</strong> - Clé Étrangère : Référence vers une autre entité</span>
+            </div>
+            <div class="legend-item">
+                <span style="margin-left: 45px;"><strong>Cardinalités</strong> - (1,n) : un à plusieurs | (0,n) : zéro à plusieurs | (1,1) : un à un | (0,1) : zéro ou un</span>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>📅 Date :</strong> 2025-10-08</p>
+            <p><strong>👤 Auteur :</strong> Hafsa Allali</p>
+            <p><strong>🏥 Projet :</strong> Système de Gestion Hospitalière - MediCare Plus</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - MCD, MLD & Diagrammes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h2 {
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: #28a745;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: pre;
+        }
+        
+        .entity {
+            background: white;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            min-width: 200px;
+        }
+        
+        .entity-title {
+            font-weight: bold;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .attribute {
+            padding: 3px 0;
+            font-size: 0.9rem;
+        }
+        
+        .pk {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .fk {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .use-case {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .actor {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .rule {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table th {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .actions {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Documentation Technique</h1>
+        <p class="subtitle">Système de Gestion Hospitalière - MediCare Plus</p>
+        
+        <!-- MCD -->
+        <div class="section">
+            <h2>1. MCD - Modèle Conceptuel de Données</h2>
+            
+            <div class="grid">
+                <div class="entity">
+                    <div class="entity-title">PATIENT</div>
+                    <div class="attribute"><span class="pk">idpatient</span> (PK)</div>
+                    <div class="attribute">nom</div>
+                    <div class="attribute">prenom</div>
+                    <div class="attribute">age</div>
+                    <div class="attribute">date_naissance</div>
+                    <div class="attribute">adresse</div>
+                    <div class="attribute">telephone</div>
+                    <div class="attribute">email</div>
+                    <div class="attribute">sexe</div>
+                    <div class="attribute">groupe_sanguin</div>
+                </div>
+                
+                <div class="entity">
+                    <div class="entity-title">MEDECIN</div>
+                    <div class="attribute"><span class="pk">idmedecin</span> (PK)</div>
+                    <div class="attribute">nom</div>
+                    <div class="attribute">prenom</div>
+                    <div class="attribute">specialite</div>
+                    <div class="attribute">telephone</div>
+                    <div class="attribute">email</div>
+                    <div class="attribute">numero_licence</div>
+                    <div class="attribute">tarif_consultation</div>
+                    <div class="attribute">statut</div>
+                </div>
+                
+                <div class="entity">
+                    <div class="entity-title">RENDEZ_VOUS</div>
+                    <div class="attribute"><span class="pk">idrendezvous</span> (PK)</div>
+                    <div class="attribute"><span class="fk">idpatient</span> (FK)</div>
+                    <div class="attribute"><span class="fk">idmedecin</span> (FK)</div>
+                    <div class="attribute">date_rdv</div>
+                    <div class="attribute">heure_rdv</div>
+                    <div class="attribute">motif</div>
+                    <div class="attribute">statut</div>
+                    <div class="attribute">notes</div>
+                </div>
+                
+                <div class="entity">
+                    <div class="entity-title">FACTURE</div>
+                    <div class="attribute"><span class="pk">idfacture</span> (PK)</div>
+                    <div class="attribute"><span class="fk">idpatient</span> (FK)</div>
+                    <div class="attribute"><span class="fk">idmedecin</span> (FK)</div>
+                    <div class="attribute"><span class="fk">idrendezvous</span> (FK)</div>
+                    <div class="attribute">numero_facture</div>
+                    <div class="attribute">montant_total</div>
+                    <div class="attribute">montant_paye</div>
+                    <div class="attribute">statut_paiement</div>
+                </div>
+            </div>
+            
+            <h3>Relations</h3>
+            <table>
+                <tr>
+                    <th>Entité 1</th>
+                    <th>Cardinalité</th>
+                    <th>Relation</th>
+                    <th>Cardinalité</th>
+                    <th>Entité 2</th>
+                </tr>
+                <tr>
+                    <td>PATIENT</td>
+                    <td>1,n</td>
+                    <td>PRENDRE</td>
+                    <td>0,n</td>
+                    <td>RENDEZ_VOUS</td>
+                </tr>
+                <tr>
+                    <td>MEDECIN</td>
+                    <td>1,1</td>
+                    <td>CONSULTER</td>
+                    <td>0,n</td>
+                    <td>RENDEZ_VOUS</td>
+                </tr>
+                <tr>
+                    <td>PATIENT</td>
+                    <td>1,1</td>
+                    <td>CONCERNER</td>
+                    <td>0,n</td>
+                    <td>FACTURE</td>
+                </tr>
+                <tr>
+                    <td>MEDECIN</td>
+                    <td>1,n</td>
+                    <td>ETABLIR</td>
+                    <td>0,n</td>
+                    <td>FACTURE</td>
+                </tr>
+                <tr>
+                    <td>RENDEZ_VOUS</td>
+                    <td>0,1</td>
+                    <td>GENERER</td>
+                    <td>0,1</td>
+                    <td>FACTURE</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Diagramme de Cas d'Utilisation -->
+        <div class="section">
+            <h2>2. Diagramme de Cas d'Utilisation</h2>
+            
+            <h3>Acteurs du Système</h3>
+            
+            <div class="actor">
+                <strong>👤 SECRÉTAIRE / ADMINISTRATEUR</strong>
+                <ul>
+                    <li>Gestion complète des patients (Ajouter, Consulter, Modifier, Supprimer)</li>
+                    <li>Gestion complète des médecins (Ajouter, Consulter, Modifier, Supprimer)</li>
+                    <li>Gestion des rendez-vous (Prendre, Consulter, Modifier, Annuler)</li>
+                    <li>Accès au tableau de bord</li>
+                </ul>
+            </div>
+            
+            <div class="actor">
+                <strong>💰 COMPTABLE</strong>
+                <ul>
+                    <li>Créer des factures</li>
+                    <li>Consulter les factures</li>
+                    <li>Modifier les factures</li>
+                    <li>Enregistrer les paiements</li>
+                    <li>Imprimer les factures</li>
+                    <li>Suivre les paiements</li>
+                </ul>
+            </div>
+            
+            <div class="actor">
+                <strong>📊 DIRECTEUR</strong>
+                <ul>
+                    <li>Consulter le tableau de bord</li>
+                    <li>Visualiser les statistiques</li>
+                    <li>Exporter la base de données</li>
+                    <li>Générer des rapports</li>
+                </ul>
+            </div>
+            
+            <h3>Cas d'Utilisation Principaux</h3>
+            
+            <div class="use-case">
+                <strong>CU1 : Ajouter un Patient</strong><br>
+                <strong>Acteur :</strong> Secrétaire<br>
+                <strong>Description :</strong> Permet d'enregistrer un nouveau patient dans le système avec toutes ses informations personnelles et médicales.
+            </div>
+            
+            <div class="use-case">
+                <strong>CU2 : Prendre un Rendez-vous</strong><br>
+                <strong>Acteur :</strong> Secrétaire<br>
+                <strong>Description :</strong> Permet de planifier un rendez-vous entre un patient et un médecin à une date et heure précises.
+            </div>
+            
+            <div class="use-case">
+                <strong>CU3 : Créer une Facture</strong><br>
+                <strong>Acteur :</strong> Comptable<br>
+                <strong>Description :</strong> Permet de générer une facture pour un patient suite à une consultation ou un traitement.
+            </div>
+            
+            <div class="use-case">
+                <strong>CU4 : Enregistrer un Paiement</strong><br>
+                <strong>Acteur :</strong> Comptable<br>
+                <strong>Description :</strong> Permet d'enregistrer un paiement partiel ou total d'une facture et de mettre à jour son statut.
+            </div>
+            
+            <div class="use-case">
+                <strong>CU5 : Consulter le Tableau de Bord</strong><br>
+                <strong>Acteur :</strong> Directeur, Secrétaire<br>
+                <strong>Description :</strong> Affiche les statistiques globales du système et les derniers rendez-vous.
+            </div>
+        </div>
+        
+        <!-- Règles de Gestion -->
+        <div class="section">
+            <h2>3. Règles de Gestion</h2>
+            
+            <div class="rule">
+                <strong>RG1 - Patients :</strong> Un patient doit avoir au minimum un nom, prénom et téléphone. Un patient peut avoir plusieurs rendez-vous et plusieurs factures.
+            </div>
+            
+            <div class="rule">
+                <strong>RG2 - Médecins :</strong> Un médecin doit avoir une spécialité et un numéro de licence unique. Seuls les médecins actifs peuvent recevoir de nouveaux rendez-vous.
+            </div>
+            
+            <div class="rule">
+                <strong>RG3 - Rendez-vous :</strong> Un rendez-vous concerne un seul patient et un seul médecin. Les statuts possibles sont : Programmé, Confirmé, Terminé, Annulé.
+            </div>
+            
+            <div class="rule">
+                <strong>RG4 - Factures :</strong> Chaque facture a un numéro unique. Le montant payé ne peut pas dépasser le montant total. Le statut est calculé automatiquement.
+            </div>
+            
+            <div class="rule">
+                <strong>RG5 - Sécurité :</strong> Les suppressions de patients/médecins entraînent la suppression en cascade des rendez-vous associés. Les factures conservent les informations même si le médecin est supprimé.
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="actions">
+            <a href="../voir_database.php" class="btn">📊 Voir la Base de Données</a>
+            <a href="../export_database.php" class="btn">💾 Exporter SQL</a>
+            <a href="../index.php" class="btn btn-secondary">🏠 Retour à l'Accueil</a>
+        </div>
+        
+        <div class="section" style="text-align: center; background: #f8f9fa;">
+            <p><strong>📅 Date de création :</strong> 2025-10-08</p>
+            <p><strong>👤 Auteur :</strong> Hafsa Allali</p>
+            <p><strong>🏥 Projet :</strong> Système de Gestion Hospitalière - MediCare Plus</p>
+        </div>
+    </div>
+</body>
+</html>

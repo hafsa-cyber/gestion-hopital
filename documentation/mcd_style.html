@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCD - Gestion Hospitalière</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000000;
+            background-image: 
+                linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            padding: 50px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* Entités */
+        .entity {
+            background: #b8cfe5;
+            border: 2px solid #2c3e50;
+            padding: 0;
+            position: absolute;
+            min-width: 200px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+        
+        .entity-header {
+            background: #b8cfe5;
+            border: 2px solid #2c3e50;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #000;
+            margin: 5px;
+        }
+        
+        .entity-body {
+            padding: 10px;
+            background: #d4e4f7;
+        }
+        
+        .attribute {
+            font-size: 13px;
+            color: #000;
+            padding: 3px 5px;
+            margin: 2px 0;
+        }
+        
+        .attribute.pk {
+            font-weight: bold;
+        }
+        
+        /* Positions des entités */
+        .patient {
+            top: 50px;
+            left: 100px;
+        }
+        
+        .rendez-vous {
+            top: 50px;
+            right: 100px;
+        }
+        
+        .facture {
+            bottom: 50px;
+            left: 50px;
+        }
+        
+        .medecin {
+            bottom: 50px;
+            right: 50px;
+        }
+        
+        /* Flèches */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .arrow {
+            stroke: #ffffff;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        
+        .arrow-label {
+            fill: #ffffff;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SVG pour les flèches -->
+        <svg>
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                    <polygon points="0 0, 10 3, 0 6" fill="#ffffff" />
+                </marker>
+            </defs>
+            
+            <!-- Flèche PATIENT vers RENDEZ_VOUS -->
+            <line x1="320" y1="150" x2="450" y2="150" class="arrow" />
+            
+            <!-- Flèche RENDEZ_VOUS vers MEDECIN -->
+            <line x1="650" y1="300" x2="650" y2="450" class="arrow" />
+            
+            <!-- Flèche PATIENT vers FACTURE -->
+            <line x1="200" y1="380" x2="200" y2="500" class="arrow" />
+            
+            <!-- Flèche FACTURE vers MEDECIN -->
+            <line x1="300" y1="650" x2="500" y2="650" class="arrow" />
+        </svg>
+        
+        <!-- PATIENT -->
+        <div class="entity patient">
+            <div class="entity-header">PATIENT</div>
+            <div class="entity-body">
+                <div class="attribute pk">idpatient (PK)</div>
+                <div class="attribute">nom</div>
+                <div class="attribute">prenom</div>
+                <div class="attribute">age</div>
+                <div class="attribute">date_naissance</div>
+                <div class="attribute">adresse</div>
+                <div class="attribute">telephone</div>
+                <div class="attribute">email</div>
+                <div class="attribute">sexe</div>
+                <div class="attribute">groupe_sanguin</div>
+                <div class="attribute">date_inscription</div>
+            </div>
+        </div>
+        
+        <!-- RENDEZ_VOUS -->
+        <div class="entity rendez-vous">
+            <div class="entity-header">RENDEZ_VOUS</div>
+            <div class="entity-body">
+                <div class="attribute pk">idrendezvous(PK)</div>
+                <div class="attribute">date_rdv</div>
+                <div class="attribute">heure_rdv</div>
+                <div class="attribute">motif</div>
+                <div class="attribute">statut</div>
+                <div class="attribute">notes</div>
+                <div class="attribute">date_creation</div>
+            </div>
+        </div>
+        
+        <!-- FACTURE -->
+        <div class="entity facture">
+            <div class="entity-header">FACTURE</div>
+            <div class="entity-body">
+                <div class="attribute pk">idfacture (PK)</div>
+                <div class="attribute">numero_facture</div>
+                <div class="attribute">date_facture</div>
+                <div class="attribute">montant_total</div>
+                <div class="attribute">montant_paye</div>
+                <div class="attribute">statut_paiement</div>
+                <div class="attribute">mode_paiement</div>
+                <div class="attribute">description</div>
+                <div class="attribute">date_creation</div>
+            </div>
+        </div>
+        
+        <!-- MEDECIN -->
+        <div class="entity medecin">
+            <div class="entity-header">MEDECIN</div>
+            <div class="entity-body">
+                <div class="attribute pk">idmedecin (PK)</div>
+                <div class="attribute">nom</div>
+                <div class="attribute">prenom</div>
+                <div class="attribute">specialite</div>
+                <div class="attribute">telephone</div>
+                <div class="attribute">email</div>
+                <div class="attribute">adresse</div>
+                <div class="attribute">numero_licence</div>
+                <div class="attribute">date_embauche</div>
+                <div class="attribute">statut</div>
+                <div class="attribute">tarif_consult</div>
+                <div class="attribute">date_creation</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

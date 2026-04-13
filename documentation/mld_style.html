@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLD - Gestion Hospitalière</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000000;
+            background-image: 
+                linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            padding: 50px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 900px;
+        }
+        
+        /* Tables */
+        .table {
+            background: #b8cfe5;
+            border: 2px solid #2c3e50;
+            padding: 0;
+            position: absolute;
+            min-width: 280px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+        
+        .table-header {
+            background: #b8cfe5;
+            border: 2px solid #2c3e50;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            color: #000;
+            margin: 5px;
+        }
+        
+        .table-body {
+            padding: 0;
+            background: #d4e4f7;
+        }
+        
+        .field {
+            font-size: 12px;
+            color: #000;
+            padding: 8px 12px;
+            margin: 0;
+            border-bottom: 1px solid #b8cfe5;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .field:last-child {
+            border-bottom: none;
+        }
+        
+        .field-name {
+            font-weight: normal;
+        }
+        
+        .field-type {
+            color: #555;
+            font-size: 11px;
+        }
+        
+        .field.pk {
+            background: #ffd4d4;
+            font-weight: bold;
+        }
+        
+        .field.fk {
+            background: #fff4d4;
+            font-weight: bold;
+        }
+        
+        .constraint {
+            font-size: 10px;
+            color: #c0392b;
+            font-weight: bold;
+        }
+        
+        /* Positions des tables */
+        .patients {
+            top: 50px;
+            left: 80px;
+        }
+        
+        .rendez-vous {
+            top: 50px;
+            right: 80px;
+        }
+        
+        .factures {
+            bottom: 50px;
+            left: 50px;
+        }
+        
+        .medecins {
+            bottom: 50px;
+            right: 50px;
+        }
+        
+        /* Flèches */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .arrow {
+            stroke: #ffffff;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        
+        .fk-label {
+            fill: #ffeb3b;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SVG pour les flèches -->
+        <svg>
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                    <polygon points="0 0, 10 3, 0 6" fill="#ffffff" />
+                </marker>
+            </defs>
+            
+            <!-- Flèche PATIENTS vers RENDEZ_VOUS -->
+            <line x1="380" y1="200" x2="550" y2="200" class="arrow" />
+            <text x="450" y="190" class="fk-label">FK</text>
+            
+            <!-- Flèche RENDEZ_VOUS vers MEDECINS -->
+            <line x1="850" y1="350" x2="850" y2="500" class="arrow" />
+            <text x="860" y="420" class="fk-label">FK</text>
+            
+            <!-- Flèche PATIENTS vers FACTURES -->
+            <line x1="250" y1="450" x2="250" y2="550" class="arrow" />
+            <text x="260" y="500" class="fk-label">FK</text>
+            
+            <!-- Flèche FACTURES vers MEDECINS -->
+            <line x1="380" y1="700" x2="550" y2="700" class="arrow" />
+            <text x="450" y="690" class="fk-label">FK</text>
+            
+            <!-- Flèche RENDEZ_VOUS vers FACTURES -->
+            <line x1="700" y1="350" x2="400" y2="600" class="arrow" />
+            <text x="550" y="470" class="fk-label">FK</text>
+        </svg>
+        
+        <!-- TABLE PATIENTS -->
+        <div class="table patients">
+            <div class="table-header">PATIENTS</div>
+            <div class="table-body">
+                <div class="field pk">
+                    <span class="field-name">idpatient</span>
+                    <span class="field-type">INT <span class="constraint">PK</span></span>
+                </div>
+                <div class="field">
+                    <span class="field-name">nom</span>
+                    <span class="field-type">VARCHAR(100)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">prenom</span>
+                    <span class="field-type">VARCHAR(100)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">age</span>
+                    <span class="field-type">INT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_naissance</span>
+                    <span class="field-type">DATE</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">adress</span>
+                    <span class="field-type">VARCHAR(255)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">telephone</span>
+                    <span class="field-type">VARCHAR(20)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">email</span>
+                    <span class="field-type">VARCHAR(100)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">sexe</span>
+                    <span class="field-type">ENUM</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">groupe_sanguin</span>
+                    <span class="field-type">VARCHAR(5)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_inscription</span>
+                    <span class="field-type">TIMESTAMP</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TABLE RENDEZ_VOUS -->
+        <div class="table rendez-vous">
+            <div class="table-header">RENDEZ_VOUS</div>
+            <div class="table-body">
+                <div class="field pk">
+                    <span class="field-name">idrendezvous</span>
+                    <span class="field-type">INT <span class="constraint">PK</span></span>
+                </div>
+                <div class="field fk">
+                    <span class="field-name">#idpatient</span>
+                    <span class="field-type">INT <span class="constraint">FK</span></span>
+                </div>
+                <div class="field fk">
+                    <span class="field-name">#idmedecin</span>
+                    <span class="field-type">INT <span class="constraint">FK</span></span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_rdv</span>
+                    <span class="field-type">DATE</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">heure_rdv</span>
+                    <span class="field-type">TIME</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">motif</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">statut</span>
+                    <span class="field-type">ENUM</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">notes</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_creation</span>
+                    <span class="field-type">TIMESTAMP</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TABLE FACTURES -->
+        <div class="table factures">
+            <div class="table-header">FACTURES</div>
+            <div class="table-body">
+                <div class="field pk">
+                    <span class="field-name">idfacture</span>
+                    <span class="field-type">INT <span class="constraint">PK</span></span>
+                </div>
+                <div class="field fk">
+                    <span class="field-name">#idpatient</span>
+                    <span class="field-type">INT <span class="constraint">FK</span></span>
+                </div>
+                <div class="field fk">
+                    <span class="field-name">#idmedecin</span>
+                    <span class="field-type">INT <span class="constraint">FK</span></span>
+                </div>
+                <div class="field fk">
+                    <span class="field-name">#idrendezvous</span>
+                    <span class="field-type">INT <span class="constraint">FK</span></span>
+                </div>
+                <div class="field">
+                    <span class="field-name">numero_facture</span>
+                    <span class="field-type">VARCHAR(50) <span class="constraint">UNIQUE</span></span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_facture</span>
+                    <span class="field-type">DATE</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">montant_total</span>
+                    <span class="field-type">DECIMAL(10,2)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">montant_paye</span>
+                    <span class="field-type">DECIMAL(10,2)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">statut_paiement</span>
+                    <span class="field-type">ENUM</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">mode_paiement</span>
+                    <span class="field-type">ENUM</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">description</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_creation</span>
+                    <span class="field-type">TIMESTAMP</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TABLE MEDECINS -->
+        <div class="table medecins">
+            <div class="table-header">MEDECINS</div>
+            <div class="table-body">
+                <div class="field pk">
+                    <span class="field-name">idmedecin</span>
+                    <span class="field-type">INT <span class="constraint">PK</span></span>
+                </div>
+                <div class="field">
+                    <span class="field-name">nom</span>
+                    <span class="field-type">VARCHAR(100)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">prenom</span>
+                    <span class="field-type">VARCHAR(100)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">specialite</span>
+                    <span class="field-type">VARCHAR(100)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">telephone</span>
+                    <span class="field-type">VARCHAR(20)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">email</span>
+                    <span class="field-type">VARCHAR(100)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">adresse</span>
+                    <span class="field-type">VARCHAR(255)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">numero_licence</span>
+                    <span class="field-type">VARCHAR(50) <span class="constraint">UNIQUE</span></span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_embauche</span>
+                    <span class="field-type">DATE</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">statut</span>
+                    <span class="field-type">ENUM</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">tarif_consultation</span>
+                    <span class="field-type">DECIMAL(10,2)</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">date_creation</span>
+                    <span class="field-type">TIMESTAMP</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
