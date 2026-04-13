@@ -3,7 +3,7 @@ $servername = "localhost";
 $username = "root";
 $password = ""; // vide par défaut sur XAMPP
 $dbname = "hopital";
-$port = 3307; // ⚠️ ajoute le port indiqué dans XAMPP
+$port = 3306; // Port par defaut dans XAMPP
 
 // Connexion serveur sans base
 $conn = new mysqli($servername, $username, $password, null, $port);
